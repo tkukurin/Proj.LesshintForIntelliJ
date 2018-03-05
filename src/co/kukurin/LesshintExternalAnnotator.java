@@ -73,24 +73,10 @@ public class LesshintExternalAnnotator extends ExternalAnnotator<PsiFile, Lesshi
     int[] lengths = new int[fileByLines.length];
 
     for (int i = 1; i < lengths.length; i++) {
-      String previous = fileByLines[i - 1];
-      String current = fileByLines[i];
-
-      // account for prev index + prev length + newline + whitespace
-      // lesshint outputs column info without taking whitespace into account
-      lengths[i] = lengths[i - 1] +
-          StringUtil.trimLeading(previous).length() +
-          countPrefixWhitespace(current) + 1;
+      // account for newline
+      lengths[i] = lengths[i - 1] + fileByLines[i - 1].length() + 1;
     }
 
     return lengths;
-  }
-
-  private static int countPrefixWhitespace(String string) {
-    int i = 0;
-    while (i < string.length() && Character.isWhitespace(string.charAt(i))) {
-      i++;
-    }
-    return i;
   }
 }
