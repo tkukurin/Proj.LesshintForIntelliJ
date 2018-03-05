@@ -1,0 +1,21 @@
+<idea-plugin>
+  <id>co.kukurin</id>
+  <name>Linter for LESS and CSS files</name>
+  <version>1.0</version>
+
+  <description><![CDATA[
+      A plugin to lint CSS and LESS files in IntelliJ using LessHint.
+    ]]></description>
+
+  <change-notes><![CDATA[
+      Initial version.
+    ]]>
+  </change-notes>
+
+  <idea-version since-build="173.0"/>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <externalAnnotator language="TEXT" implementationClass="co.kukurin.LesshintExternalAnnotator" />
+  </extensions>
+
+</idea-plugin>
