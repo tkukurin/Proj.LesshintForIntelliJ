@@ -5,7 +5,7 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.ExternalAnnotator;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -30,10 +30,10 @@ public class LesshintExternalAnnotator extends ExternalAnnotator<PsiFile, Lesshi
   @Nullable
   @Override
   public LesshintOutput doAnnotate(PsiFile file) {
-    CharSequence fileType = FileUtil.getExtension(file.getName(), /*default=*/ "");
+    String fileType = file.getName().substring(file.getName().lastIndexOf('.'));
     String basePath = file.getContainingDirectory().getVirtualFile().getPath();
 
-    if (!fileType.equals("css") && !fileType.equals("less")) {
+    if (!fileType.equals(".css") && !fileType.equals(".less")) {
       return LesshintOutput.empty();
     }
 
@@ -42,7 +42,7 @@ public class LesshintExternalAnnotator extends ExternalAnnotator<PsiFile, Lesshi
       // https://intellij-support.jetbrains.com/hc/en-us/community/posts/
       // 115000337510-Only-trigger-externalAnnotator-when-the-file-system-is-in-sync
       String documentText = file.getText();
-      Path path = Files.createTempFile("linter-file", fileType.toString());
+      Path path = Files.createTempFile("linter-file", fileType);
       Files.write(path, documentText.getBytes(StandardCharsets.UTF_8));
       String linterOutput = LesshintProcessUtil.lint(basePath, path.toString());
       Files.delete(path);
@@ -78,7 +78,9 @@ public class LesshintExternalAnnotator extends ExternalAnnotator<PsiFile, Lesshi
 
       // account for prev index + prev length + newline + whitespace
       // lesshint outputs column info without taking whitespace into account
-      lengths[i] = lengths[i - 1] + previous.trim().length() + countPrefixWhitespace(current) + 1;
+      lengths[i] = lengths[i - 1] +
+          StringUtil.trimLeading(previous).length() +
+          countPrefixWhitespace(current) + 1;
     }
 
     return lengths;
