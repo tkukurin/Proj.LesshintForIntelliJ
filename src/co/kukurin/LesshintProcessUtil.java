@@ -2,8 +2,10 @@ package co.kukurin;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
+import com.intellij.execution.configurations.GeneralCommandLine.ParentEnvironmentType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.io.StreamUtil;
+import com.intellij.util.EnvironmentUtil;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -21,7 +23,7 @@ public class LesshintProcessUtil {
       throws ExecutionException, IOException, InterruptedException {
     Process process = new GeneralCommandLine()
         .withExePath("lesshint")
-        .withEnvironment(System.getenv())
+        .withEnvironment(EnvironmentUtil.getEnvironmentMap())
         .withCharset(StandardCharsets.UTF_8)
         .withWorkDirectory(basePath)
         .withParameters(lintFilePath)
