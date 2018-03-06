@@ -15,7 +15,9 @@
   <idea-version since-build="173.0"/>
 
   <extensions defaultExtensionNs="com.intellij">
-    <externalAnnotator language="" implementationClass="co.kukurin.LesshintExternalAnnotator" />
+    <externalAnnotator language="TEXT" implementationClass="co.kukurin.LesshintExternalAnnotator" />
+    <externalAnnotator language="CSS" implementationClass="co.kukurin.LesshintExternalAnnotator" />
+    <externalAnnotator language="LESS" implementationClass="co.kukurin.LesshintExternalAnnotator" />
   </extensions>
 
 </idea-plugin>

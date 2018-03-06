@@ -19,11 +19,13 @@ import org.jetbrains.annotations.Nullable;
 public class LesshintExternalAnnotator extends ExternalAnnotator<PsiFile, LesshintOutput> {
 
   private static final Logger log = Logger.getInstance(LesshintExternalAnnotator.class);
-  public static final int NEWLINE_LENGTH = System.lineSeparator().length();
+  private static final int NEWLINE_LENGTH = System.lineSeparator().length();
+  private String basePath;
 
   @Nullable
   @Override
   public PsiFile collectInformation(@NotNull PsiFile file) {
+    this.basePath = file.getContainingDirectory().getVirtualFile().getPath();
     return file;
   }
 
@@ -31,7 +33,6 @@ public class LesshintExternalAnnotator extends ExternalAnnotator<PsiFile, Lesshi
   @Override
   public LesshintOutput doAnnotate(PsiFile file) {
     String fileType = file.getName().substring(file.getName().lastIndexOf('.'));
-    String basePath = file.getContainingDirectory().getVirtualFile().getPath();
 
     if (!fileType.equals(".css") && !fileType.equals(".less")) {
       return LesshintOutput.empty();
