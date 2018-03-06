@@ -5,7 +5,6 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.ExternalAnnotator;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -20,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class LesshintExternalAnnotator extends ExternalAnnotator<PsiFile, LesshintOutput> {
 
   private static final Logger log = Logger.getInstance(LesshintExternalAnnotator.class);
+  public static final int NEWLINE_LENGTH = System.lineSeparator().length();
 
   @Nullable
   @Override
@@ -73,8 +73,7 @@ public class LesshintExternalAnnotator extends ExternalAnnotator<PsiFile, Lesshi
     int[] lengths = new int[fileByLines.length];
 
     for (int i = 1; i < lengths.length; i++) {
-      // account for newline
-      lengths[i] = lengths[i - 1] + fileByLines[i - 1].length() + 1;
+      lengths[i] = lengths[i - 1] + fileByLines[i - 1].length() + NEWLINE_LENGTH;
     }
 
     return lengths;
